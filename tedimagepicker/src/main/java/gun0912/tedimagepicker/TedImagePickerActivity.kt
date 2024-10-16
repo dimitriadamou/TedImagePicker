@@ -119,6 +119,7 @@ internal class TedImagePickerActivity : AppCompatActivity() {
         with(binding) {
             buttonGravity = builder.buttonGravity
             buttonText = builder.buttonText ?: getString(builder.buttonTextResId)
+            annotateButtonText = getString(builder.annotateButtonTextResId)
             buttonTextColor =
                 ContextCompat.getColor(this@TedImagePickerActivity, builder.buttonTextColorResId)
             buttonBackground = builder.buttonBackgroundResId
@@ -371,7 +372,7 @@ internal class TedImagePickerActivity : AppCompatActivity() {
         }
     }
 
-    private fun onMultiMediaDone() {
+    private fun onMultiMediaDone(annotate: Boolean = false) {
 
 
         val selectedUriList = mediaAdapter.selectedUriList
@@ -385,6 +386,7 @@ internal class TedImagePickerActivity : AppCompatActivity() {
                     EXTRA_SELECTED_URI_LIST,
                     ArrayList(selectedUriList)
                 )
+                putExtra("annotate", annotate)
             }
             setResult(Activity.RESULT_OK, data)
             finish()
@@ -416,6 +418,14 @@ internal class TedImagePickerActivity : AppCompatActivity() {
         }
         binding.viewDoneBottom.root.setOnClickListener {
             onMultiMediaDone()
+        }
+
+        binding.viewAnnotateTop.root.setOnClickListener {
+            onMultiMediaDone(true)
+        }
+
+        binding.viewAnnotateButtonBottom.root.setOnClickListener {
+            onMultiMediaDone(true)
         }
 
         binding.viewSelectedAlbumDropDown.setOnClickListener {

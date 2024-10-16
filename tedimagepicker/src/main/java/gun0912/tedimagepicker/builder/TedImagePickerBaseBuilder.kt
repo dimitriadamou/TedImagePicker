@@ -49,6 +49,7 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
     internal var titleResId: Int = R.string.ted_image_picker_title,
     internal var buttonGravity: ButtonGravity = ButtonGravity.TOP,
     internal var buttonText: String? = null,
+    internal var annotateButtonText: String? = null,
     @DrawableRes
     internal var buttonBackgroundResId: Int = R.drawable.btn_done_button,
     @ColorRes
@@ -57,7 +58,8 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
     @StringRes
     internal var buttonTextResId: Int = R.string.ted_image_picker_done,
     internal var selectedUriList: List<Uri>? = null,
-    @DrawableRes
+    @StringRes
+    internal var annotateButtonTextResId: Int = R.string.ted_image_picker_annotate,
     internal var backButtonResId: Int = R.drawable.ic_arrow_back_black_24dp,
     internal var maxCount: Int = Int.MAX_VALUE,
     internal var maxCountMessage: String? = null,
