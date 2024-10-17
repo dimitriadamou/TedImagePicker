@@ -1,7 +1,12 @@
+plugins {
+    id "com.vanniktech.maven.publish" version "0.25.0"
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
+
 
 android {
     compileSdkVersion versions.compileSdkVersion
@@ -9,22 +14,23 @@ android {
     defaultConfig {
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
-
         consumerProguardFiles 'consumer-rules.pro'
     }
-
 
     dataBinding {
         enabled = true
     }
 
     buildTypes {
+        releaseAar {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {
@@ -32,6 +38,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
     kapt "com.android.databinding:compiler:${versions.gradle}"
 
+    // Add your other dependencies...
     implementation deps.androidx.appcompat
     implementation deps.rx.rxJava
     implementation deps.rx.rxAndroid
@@ -47,4 +54,38 @@ dependencies {
     implementation 'com.alexvasilkov:gesture-views:2.5.2'
 }
 
-apply plugin: "com.vanniktech.maven.publish"
+import com.vanniktech.maven.publish.SonatypeHost
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.S01)
+
+    signAllPublications()
+
+    coordinates("io.github.dimitriadamou", "tedimagepicker", "1.4.2")
+
+    pom {
+        name = "TedImagePicker"
+        description = "TedImagePicker is simple image picker"
+        inceptionYear = "2019"
+        url = "https://github.com/DimitriAdamou/TedImagePicker/"
+        licenses {
+            license {
+                name = "The Apache Software License, Version 2.0"
+                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                distribution = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+        }
+        developers {
+            developer {
+                id = "DimitriAdamou"
+                name = "DimitriAdamou"
+                url = "https://github.com/DimitriAdamou"
+            }
+        }
+        scm {
+            url = "https://github.com/DimitriAdamou/TedImagePicker"
+            connection = "scm:git:git://github.com/DimitriAdamou/TedImagePicker.git"
+            developerConnection = "=scm:git:ssh://git@github.com/DimitriAdamou/TedImagePicker.git"
+        }
+    }
+}

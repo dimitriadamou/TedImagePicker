@@ -3,7 +3,7 @@ ext {
             'minSdkVersion'    : 17,
             'compileSdkVersion': 33,
             'targetSdkVersion' : 33,
-            'gradle'           : '7.2.0',
+            'gradle'           : '7.4.2',
             'kotlin'           : '1.7.0',
     ]
 
