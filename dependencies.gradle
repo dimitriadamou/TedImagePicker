@@ -1,10 +1,10 @@
 ext {
     versions = [
-            'minSdkVersion'    : 17,
+            'minSdkVersion'    : 23,
             'compileSdkVersion': 33,
             'targetSdkVersion' : 33,
-            'gradle'           : '7.4.2',
-            'kotlin'           : '1.7.0',
+            'gradle'           : '8.2.2',
+            'kotlin'           : '1.9.0',
     ]
 
     deps = [

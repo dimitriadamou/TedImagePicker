@@ -1,5 +1,5 @@
 plugins {
-    id "com.vanniktech.maven.publish" version "0.25.0"
+    id "com.vanniktech.maven.publish" version "0.30.0"
 }
 
 apply plugin: 'com.android.library'
@@ -17,6 +17,15 @@ android {
         consumerProguardFiles 'consumer-rules.pro'
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
     dataBinding {
         enabled = true
     }
@@ -31,6 +40,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'gun0912.tedimagepicker'
 }
 
 dependencies {
@@ -57,7 +67,7 @@ dependencies {
 import com.vanniktech.maven.publish.SonatypeHost
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.S01)
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, true)
 
     signAllPublications()
 
