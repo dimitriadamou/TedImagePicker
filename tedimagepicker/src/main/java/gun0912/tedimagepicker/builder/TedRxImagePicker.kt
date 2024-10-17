@@ -15,14 +15,14 @@ import java.lang.ref.WeakReference
 
 @Parcelize
 data class SelectedResult(
-    val uri: Uri,
-    val annotate: Boolean
+    public val uri: Uri,
+    public val annotate: Boolean
 ) : Parcelable
 
 @Parcelize
 data class SelectedResults(
-    val uris: List<Uri>,
-    val annotate: Boolean
+    public val uris: List<Uri>,
+    public val annotate: Boolean
 ) : Parcelable
 
 
