@@ -25,6 +25,8 @@ import gun0912.tedimagepicker.adapter.GridSpacingItemDecoration
 import gun0912.tedimagepicker.adapter.MediaAdapter
 import gun0912.tedimagepicker.adapter.SelectedMediaAdapter
 import gun0912.tedimagepicker.base.BaseRecyclerViewAdapter
+import gun0912.tedimagepicker.builder.SelectedResult
+import gun0912.tedimagepicker.builder.SelectedResults
 import gun0912.tedimagepicker.builder.TedImagePickerBaseBuilder
 import gun0912.tedimagepicker.builder.type.AlbumType
 import gun0912.tedimagepicker.builder.type.CameraMedia
@@ -206,7 +208,7 @@ internal class TedImagePickerActivity : AppCompatActivity() {
             onItemClickListener = object : BaseRecyclerViewAdapter.OnItemClickListener<Media> {
                 override fun onItemClick(data: Media, itemPosition: Int, layoutPosition: Int) {
                     binding.isAlbumOpened = false
-                    this@TedImagePickerActivity.onMediaClick(data.uri)
+                    this@TedImagePickerActivity.onMediaClick(data.uri, false)
                 }
 
                 override fun onHeaderClick() {
@@ -290,16 +292,16 @@ internal class TedImagePickerActivity : AppCompatActivity() {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
                             loadMedia(true)
-                            onMediaClick(uri)
+                            onMediaClick(uri, false)
                         }
                 }
             }
     }
 
 
-    private fun onMediaClick(uri: Uri) {
+    private fun onMediaClick(uri: Uri, annotate: Boolean) {
         when (builder.selectType) {
-            SelectType.SINGLE -> onSingleMediaClick(uri)
+            SelectType.SINGLE -> onSingleMediaClick(SelectedResult(uri, annotate))
             SelectType.MULTI -> onMultiMediaClick(uri)
         }
     }
@@ -353,9 +355,9 @@ internal class TedImagePickerActivity : AppCompatActivity() {
         }.start()
     }
 
-    private fun onSingleMediaClick(uri: Uri) {
+    private fun onSingleMediaClick(result: SelectedResult) {
         val data = Intent().apply {
-            putExtra(EXTRA_SELECTED_URI, uri)
+            putExtra(EXTRA_SELECTED_URI, result)
         }
         setResult(Activity.RESULT_OK, data)
         finish()
@@ -373,8 +375,6 @@ internal class TedImagePickerActivity : AppCompatActivity() {
     }
 
     private fun onMultiMediaDone(annotate: Boolean = false) {
-
-
         val selectedUriList = mediaAdapter.selectedUriList
         if (selectedUriList.size < builder.minCount) {
             val message = builder.minCountMessage ?: getString(builder.minCountMessageResId)
@@ -382,11 +382,14 @@ internal class TedImagePickerActivity : AppCompatActivity() {
         } else {
 
             val data = Intent().apply {
-                putParcelableArrayListExtra(
+
+                putExtra(
                     EXTRA_SELECTED_URI_LIST,
-                    ArrayList(selectedUriList)
+                    SelectedResults(
+                        selectedUriList,
+                        annotate
+                    )
                 )
-                putExtra("annotate", annotate)
             }
             setResult(Activity.RESULT_OK, data)
             finish()
@@ -489,11 +492,22 @@ internal class TedImagePickerActivity : AppCompatActivity() {
                     putExtra(EXTRA_BUILDER, builder)
                 }
 
-        internal fun getSelectedUri(data: Intent): Uri? =
-            data.getParcelableExtra(EXTRA_SELECTED_URI)
+        internal fun getSelectedUri(data: Intent): SelectedResult? =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                data.getParcelableExtra(EXTRA_SELECTED_URI, SelectedResult::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                data.getParcelableExtra(EXTRA_SELECTED_URI)
+            }
 
-        internal fun getSelectedUriList(data: Intent): List<Uri>? =
-            data.getParcelableArrayListExtra(EXTRA_SELECTED_URI_LIST)
+        internal fun getSelectedUriList(data: Intent): SelectedResults? =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                data.getParcelableExtra(EXTRA_SELECTED_URI_LIST, SelectedResults::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                data.getParcelableExtra(EXTRA_SELECTED_URI_LIST)
+            }
+
     }
 
 }

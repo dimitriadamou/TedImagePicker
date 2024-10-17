@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import gun0912.tedimagepicker.builder.SelectedResult;
+import gun0912.tedimagepicker.builder.SelectedResults;
 import gun0912.tedimagepicker.builder.TedImagePicker;
 import gun0912.tedimagepicker.builder.listener.OnMultiSelectedListener;
 import gun0912.tedimagepicker.builder.listener.OnSelectedListener;
@@ -27,7 +29,7 @@ public class JavaActivity extends AppCompatActivity {
         TedImagePicker.with(this)
                 .start(new OnSelectedListener() {
                     @Override
-                    public void onSelected(@NotNull Uri uri) {
+                    public void onSelected(@NotNull SelectedResult uri) {
                         // single with lambda
                     }
                 });
@@ -36,7 +38,7 @@ public class JavaActivity extends AppCompatActivity {
         TedImagePicker.with(this)
                 .startMultiImage(new OnMultiSelectedListener() {
                     @Override
-                    public void onSelected(@NotNull List<? extends Uri> uriList) {
+                    public void onSelected(@NotNull SelectedResults results) {
                         // multi
                     }
                 });

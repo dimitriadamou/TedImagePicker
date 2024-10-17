@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import gun0912.tedimagepicker.builder.SelectedResult
+import gun0912.tedimagepicker.builder.SelectedResults
 import gun0912.tedimagepicker.builder.TedImagePicker
 import gun0912.tedimagepicker.builder.TedRxImagePicker
 import gun0912.tedimagepicker.sample.databinding.ActivityMainBinding
@@ -51,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                 .errorListener { message -> Log.d("ted", "message: $message") }
                 .cancelListener { Log.d("ted", "image select cancel") }
                 .selectedUri(selectedUriList)
-                .startMultiImage { list: List<Uri> -> showMultiImage(list) }
+                .startMultiImage { list: SelectedResults -> showMultiImage(list) }
         }
     }
 
@@ -81,16 +83,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showSingleImage(uri: Uri) {
+    private fun showSingleImage(uri: SelectedResult) {
         binding.ivImage.visibility = View.VISIBLE
         binding.containerSelectedPhotos.visibility = View.GONE
-        Glide.with(this).load(uri).into(binding.ivImage)
+        Glide.with(this).load(uri.uri).into(binding.ivImage)
 
     }
 
 
-    private fun showMultiImage(uriList: List<Uri>) {
-        this.selectedUriList = uriList
+    private fun showMultiImage(uriList: SelectedResults) {
+        this.selectedUriList = uriList.uris;
         Log.d("ted", "uriList: $uriList")
         binding.ivImage.visibility = View.GONE
         binding.containerSelectedPhotos.visibility = View.VISIBLE
@@ -100,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         val viewSize =
             TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100f, resources.displayMetrics)
                 .toInt()
-        uriList.forEach {
+        uriList.uris.forEach {
             val itemImageBinding = ItemImageBinding.inflate(LayoutInflater.from(this))
             Glide.with(this)
                 .load(it)

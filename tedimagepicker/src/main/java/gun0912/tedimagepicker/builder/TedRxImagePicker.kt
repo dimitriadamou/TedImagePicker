@@ -3,6 +3,8 @@ package gun0912.tedimagepicker.builder
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize;
 import gun0912.tedimagepicker.builder.listener.OnErrorListener
 import gun0912.tedimagepicker.builder.listener.OnMultiSelectedListener
 import gun0912.tedimagepicker.builder.listener.OnSelectedListener
@@ -10,6 +12,18 @@ import gun0912.tedimagepicker.builder.type.SelectType
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
 import java.lang.ref.WeakReference
+
+@Parcelize
+data class SelectedResult(
+    val uri: Uri,
+    val annotate: Boolean
+) : Parcelable
+
+@Parcelize
+data class SelectedResults(
+    val uris: List<Uri>,
+    val annotate: Boolean
+) : Parcelable
 
 
 class TedRxImagePicker {
@@ -22,22 +36,22 @@ class TedRxImagePicker {
     class Builder(private val contextWeakReference: WeakReference<Context>) :
         TedImagePickerBaseBuilder<Builder>() {
 
-        fun start(): Single<Uri> =
+        fun start(): Single<SelectedResult> =
             Single.create { emitter ->
                 this.onSelectedListener = object : OnSelectedListener {
-                    override fun onSelected(uri: Uri) {
-                        emitter.onSuccess(uri)
+                    override fun onSelected(result: SelectedResult) {
+                        emitter.onSuccess(result)
                     }
                 }
                 start(SelectType.SINGLE, emitter)
             }
 
 
-        fun startMultiImage(): Single<List<Uri>> =
+        fun startMultiImage(): Single<SelectedResults> =
             Single.create { emitter ->
                 this.onMultiSelectedListener = object : OnMultiSelectedListener {
-                    override fun onSelected(uriList: List<Uri>) {
-                        emitter.onSuccess(uriList)
+                    override fun onSelected(results: SelectedResults) {
+                        emitter.onSuccess(results)
                     }
                 }
                 start(SelectType.MULTI, emitter)

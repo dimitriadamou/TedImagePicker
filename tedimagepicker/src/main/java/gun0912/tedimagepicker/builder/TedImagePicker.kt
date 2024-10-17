@@ -58,18 +58,18 @@ class TedImagePicker {
 
         }
 
-        fun start(action: (Uri) -> Unit) {
+        fun start(action: (SelectedResult) -> Unit) {
             start(object : OnSelectedListener {
-                override fun onSelected(uri: Uri) {
-                    action(uri)
+                override fun onSelected(result: SelectedResult) {
+                    action(result)
                 }
             })
         }
 
-        fun startMultiImage(action: (List<Uri>) -> Unit) {
+        fun startMultiImage(action: (SelectedResults) -> Unit) {
             startMultiImage(object : OnMultiSelectedListener {
-                override fun onSelected(uriList: List<Uri>) {
-                    action(uriList)
+                override fun onSelected(results: SelectedResults) {
+                    action(results)
                 }
             })
         }

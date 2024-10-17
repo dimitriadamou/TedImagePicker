@@ -143,6 +143,8 @@ open class TedImagePickerBaseBuilder<out B : TedImagePickerBaseBuilder<B>>(
     }
 
     private fun onComplete(data: Intent) {
+        var annotate = data.extras!!.getBoolean("annotate");
+
         val selectedUri =
             TedImagePickerActivity.getSelectedUri(data)
         val selectedUriList =
