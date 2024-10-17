@@ -18,12 +18,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = '1.8'
     }
 
     dataBinding {
@@ -65,13 +65,16 @@ dependencies {
 }
 
 import com.vanniktech.maven.publish.SonatypeHost
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
 
 mavenPublishing {
+    configure(new AndroidSingleVariantLibrary("release", true, true))
+
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, true)
 
     signAllPublications()
 
-    coordinates("io.github.dimitriadamou", "tedimagepicker", "1.4.2")
+    coordinates("io.github.dimitriadamou", "tedimagepicker", "1.4.3")
 
     pom {
         name = "TedImagePicker"
